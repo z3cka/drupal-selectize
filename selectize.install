@@ -18,7 +18,7 @@ function selectize_requirements($phase) {
       $requirements['selectize_js'] = array(
         'title' => $t('Selectize.js missing'),
         'severity' => REQUIREMENT_ERROR,
-        'description' => $t('You need to download !selectize and extract the entire contents of the archive into the %path directory on your server.', array('!chosen' => l($t('Selectize.js library'), $library['download url']), '%path' => 'sites/all/libraries')),
+        'description' => $t('You need to download !selectize and extract the entire contents of the archive into the %path directory on your server.', array('!selectize' => l($t('Selectize.js library'), $library['download url']), '%path' => 'sites/all/libraries')),
       );
     }
     else {
