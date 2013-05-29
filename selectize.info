@@ -1,0 +1,3 @@
+name = Selectize
+description = Implements the Selectize.js library in Drupal.
+core = 7.x
