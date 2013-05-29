@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Installation and requirements checks.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function selectize_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $t = get_t();
+    $library = libraries_detect('selectize');
+
+    if (empty($library['installed'])) {
+      $requirements['selectize_js'] = array(
+        'title' => $t('Selectize.js missing'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t('You need to download !selectize and extract the entire contents of the archive into the %path directory on your server.', array('!chosen' => l($t('Selectize.js library'), $library['download url']), '%path' => 'sites/all/libraries')),
+      );
+    }
+    else {
+      $requirements['selectize_js'] = array(
+        'title' => $t('Selectize.js '),
+        'severity' => REQUIREMENT_OK,
+        'value' => $library['version'],
+      );
+    }
+  }
+
+  return $requirements;
+}
