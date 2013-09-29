@@ -6,3 +6,31 @@
 function selectize_init() {
 
 }
+
+/**
+ * Implements hook_menu().
+ * @return array
+ */
+function selectize_menu() {
+  $items = array();
+
+  $items['admin/config/content/selectize-js'] = array(
+    'title' => 'Selectize.js',
+    'description' => 'Administer basic settings for Selectize.js.',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer selectize'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('selectize_admin_settings'),
+    'file' => 'selectize.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements template_preprocess_select().
+ * @param $variables
+ */
+function selectize_preprocess_select(&$variables) {
+
+}
