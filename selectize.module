@@ -27,6 +27,16 @@ function selectize_menu() {
   return $items;
 }
 
+function selectize_form_alter(&$form, &$form_state, $form_id) {
+  $apply_selectize = variable_get('selectize_all', FALSE);
+
+  if ($apply_selectize) {
+    $form['#attached']['js'][] = libraries_get_path('selectize') . '/dist/js/standalone/selectize.min.js';
+    $form['#attached']['css'][] = libraries_get_path('selectize') . '/dist/css/selectize.css';
+    drupal_add_js("jQuery('select').selectize();", array('type' => 'inline', 'scope' => 'footer'));
+  }
+}
+
 /**
  * Implements template_preprocess_select().
  * @param $variables
