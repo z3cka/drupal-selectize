@@ -10,22 +10,21 @@
 function selectize_requirements($phase) {
   $requirements = array();
 
-  if ($phase == 'runtime') {
+  if ($phase == 'install' || $phase == 'runtime') {
     $t = get_t();
-    $library = libraries_detect('selectize');
+    $exists = file_exists(libraries_get_path('selectize') . '/dist/js/selectize.min.js');
 
-    if (empty($library['installed'])) {
+    if (!$exists) {
       $requirements['selectize_js'] = array(
         'title' => $t('Selectize.js missing'),
         'severity' => REQUIREMENT_ERROR,
-        'description' => $t('You need to download !selectize and extract the entire contents of the archive into the %path directory on your server.', array('!selectize' => l($t('Selectize.js library'), $library['download url']), '%path' => 'sites/all/libraries')),
+        'description' => $t('You need to download !selectize and extract the entire contents of the archive into the %path directory on your server.', array('!selectize' => l($t('Selectize.js library'), 'https://github.com/brianreavis/selectize.js'), '%path' => 'sites/all/libraries/selectize')),
       );
     }
     else {
       $requirements['selectize_js'] = array(
         'title' => $t('Selectize.js '),
         'severity' => REQUIREMENT_OK,
-        'value' => $library['version'],
       );
     }
   }
