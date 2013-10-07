@@ -34,9 +34,6 @@ function selectize_element_info() {
     '#multiple' => FALSE,
     '#theme_wrappers' => array('form_element'),
     '#settings' => selectize_default_settings(),
-    /*'#attributes' => array(
-      'class' => array('datepicker', 'picker__input'),
-    ),*/
   );
 
   return $types;
@@ -65,6 +62,12 @@ function selectize_element_process($element, &$form_state, $form) {
   return $element;
 }
 
+/**
+ * Implements hook_form_alter().
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
 function selectize_form_alter(&$form, &$form_state, $form_id) {
   $apply_selectize = variable_get('selectize_all', FALSE);
 
@@ -75,18 +78,10 @@ function selectize_form_alter(&$form, &$form_state, $form_id) {
     );
 
     $form['#attached']['css'] = array(
-      libraries_get_path('selectize') . '/dist/css/selectize.css',
       libraries_get_path('selectize') . '/dist/css/selectize.default.css',
       drupal_get_path('module', 'selectize') . '/css/selectize.drupal.css'
     );
   }
-
-  $form['testing'] = array(
-    '#title' => 'sdfsdfds',
-    '#type' => 'selectize',
-    '#settings' => selectize_default_settings(array('create' => TRUE, 'delimiter' => ', ', 'plugins' => array('restore_on_backspace', 'remove_button'))),
-    '#options' => array('' => 'Pick something or enter your own', 1 => 'dfdasfsadf', 2 => 'asdfsdfsdaf', 3 => 'asdfsadfsdaf'),
-  );
 }
 
 /**
@@ -99,7 +94,8 @@ function selectize_default_settings(array $values = array()) {
     'create' => FALSE,
     'sortField' => 'text',
     'plugins' => NULL,
-    'maxItems' => 11,
+    'highlight' => TRUE,
+    'maxItems' => 10,
     'delimiter' => NULL,
     'persist' => FALSE,
   );
