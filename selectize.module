@@ -83,8 +83,8 @@ function selectize_form_alter(&$form, &$form_state, $form_id) {
   $form['testing'] = array(
     '#title' => 'sdfsdfds',
     '#type' => 'selectize',
-    '#settings' => selectize_default_settings(),
-    '#options' => array(1, 2, 3),
+    '#settings' => selectize_default_settings(array('create' => TRUE)),
+    '#options' => array('' => 'Pick something or enter your own', 1 => '1', 2 => '2', 3 => '3'),
   );
 }
 
@@ -97,6 +97,8 @@ function selectize_default_settings(array $values = array()) {
   $settings = array(
     'create' => FALSE,
     'sortField' => 'text',
+    'plugin' => NULL,
+    'maxItems' => 100,
   );
 
   return array_merge($settings, $values);
