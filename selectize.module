@@ -20,27 +20,81 @@ function selectize_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_element_info().
+ * @return mixed
+ */
+function selectize_element_info() {
+  $types = array();
+
+  $types['selectize'] = array(
+    '#input' => TRUE,
+    '#process' => array('selectize_process'),
+    '#theme' => 'select',
+    '#multiple' => FALSE,
+    '#theme_wrappers' => array('form_element'),
+    '#settings' => selectize_default_settings(),
+    /*'#attributes' => array(
+      'class' => array('datepicker', 'picker__input'),
+    ),*/
+  );
+
+  return $types;
+}
+
+/**
+ * Element validate callback for Selectize form field.
+ * @param array $element
+ */
+function selectize_validate($element) {
+  // form_error($element, t('Please enter a valid time.'));
+}
+
+/**
+ * Element process callback for Selectize form field.
+ * @param $element
+ * @param $form_state
+ * @param $form
+ * @return mixed
+ */
+function selectize_process($element, &$form_state, $form) {
+  if (isset($element['#settings'])) {
+    drupal_add_js(array('selectize' => array('settings' => array($element['#id'] => json_encode($element['#settings'])))), array('type' => 'setting'));
+  }
+
+  return $element;
+}
+
 function selectize_form_alter(&$form, &$form_state, $form_id) {
   $apply_selectize = variable_get('selectize_all', FALSE);
 
-  if ($apply_selectize) {
-    $form['#attached']['js'][] = libraries_get_path('selectize') . '/dist/js/standalone/selectize.min.js';
-    $form['#attached']['css'][] = libraries_get_path('selectize') . '/dist/css/selectize.css';
-    drupal_add_js("jQuery('select').selectize();", array('type' => 'inline', 'scope' => 'footer'));
-  }
+  #if ($apply_selectize) {
+    $form['#attached']['js'] = array(
+      libraries_get_path('selectize') . '/dist/js/standalone/selectize.min.js',
+      drupal_get_path('module', 'selectize') . '/js/selectize.js',
+    );
+
+    $form['#attached']['css'] = array(libraries_get_path('selectize') . '/dist/css/selectize.css');
+  #}
 
   $form['testing'] = array(
     '#title' => 'sdfsdfds',
-    '#type' => 'selectize',
-    '#settings' => array(),
-    '#options' => array(),
+    '#type' => 'select',
+    '#settings' => selectize_default_settings(),
+    '#options' => array(1, 2, 3),
   );
 }
 
 /**
- * Implements template_preprocess_select().
- * @param $variables
+ * Return default settings for Selectize. Pass in values to override defaults.
+ * @param $values
+ * @return array
  */
-function selectize_preprocess_select(&$variables) {
+function selectize_default_settings(array $values = array()) {
+  $settings = array(
+    'create' => FALSE,
+    'sortField' => 'text',
+  );
 
+  return array_merge($settings, $values);
 }
