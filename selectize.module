@@ -1,13 +1,6 @@
 <?php
 
 /**
- * Implements hook_init().
- */
-function selectize_init() {
-
-}
-
-/**
  * Implements hook_menu().
  * @return array
  */
@@ -35,6 +28,13 @@ function selectize_form_alter(&$form, &$form_state, $form_id) {
     $form['#attached']['css'][] = libraries_get_path('selectize') . '/dist/css/selectize.css';
     drupal_add_js("jQuery('select').selectize();", array('type' => 'inline', 'scope' => 'footer'));
   }
+
+  $form['testing'] = array(
+    '#title' => 'sdfsdfds',
+    '#type' => 'selectize',
+    '#settings' => array(),
+    '#options' => array(),
+  );
 }
 
 /**
