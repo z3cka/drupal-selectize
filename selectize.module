@@ -29,7 +29,7 @@ function selectize_element_info() {
 
   $types['selectize'] = array(
     '#input' => TRUE,
-    '#process' => array('selectize_process'),
+    '#process' => array('selectize_element_process'),
     '#theme' => 'select',
     '#multiple' => FALSE,
     '#theme_wrappers' => array('form_element'),
@@ -46,7 +46,7 @@ function selectize_element_info() {
  * Element validate callback for Selectize form field.
  * @param array $element
  */
-function selectize_validate($element) {
+function selectize_element_validate($element) {
   // form_error($element, t('Please enter a valid time.'));
 }
 
@@ -57,7 +57,7 @@ function selectize_validate($element) {
  * @param $form
  * @return mixed
  */
-function selectize_process($element, &$form_state, $form) {
+function selectize_element_process($element, &$form_state, $form) {
   if (isset($element['#settings'])) {
     drupal_add_js(array('selectize' => array('settings' => array($element['#id'] => json_encode($element['#settings'])))), array('type' => 'setting'));
   }
@@ -68,18 +68,21 @@ function selectize_process($element, &$form_state, $form) {
 function selectize_form_alter(&$form, &$form_state, $form_id) {
   $apply_selectize = variable_get('selectize_all', FALSE);
 
-  #if ($apply_selectize) {
+  if ($apply_selectize) {
     $form['#attached']['js'] = array(
       libraries_get_path('selectize') . '/dist/js/standalone/selectize.min.js',
-      drupal_get_path('module', 'selectize') . '/js/selectize.js',
+      drupal_get_path('module', 'selectize') . '/js/selectize.drupal.js',
     );
 
-    $form['#attached']['css'] = array(libraries_get_path('selectize') . '/dist/css/selectize.css');
-  #}
+    $form['#attached']['css'] = array(
+      libraries_get_path('selectize') . '/dist/css/selectize.css',
+      drupal_get_path('module', 'selectize') . '/css/selectize.drupal.css'
+    );
+  }
 
   $form['testing'] = array(
     '#title' => 'sdfsdfds',
-    '#type' => 'select',
+    '#type' => 'selectize',
     '#settings' => selectize_default_settings(),
     '#options' => array(1, 2, 3),
   );
